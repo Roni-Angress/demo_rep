@@ -33,8 +33,8 @@ pipeline {
 
     // Enable GitHub webhook to trigger the pipeline on code changes
     triggers {
-    githubPush()
+        githubPush()
     }
-        
+
     }
 }
