@@ -1,24 +1,40 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9-slim'
+    agent any
+    
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/Roni-Angress/demo_rep.git'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("app:${env.BUILD_NUMBER}", "-f Dockerfile .")
+                    dockerImage.push()
+                }
+            }
         }
     }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'docker build -t myapp .'
+    
+    post {
+        success {
+            stage('Run Docker Container') {
+                steps {
+                    sh 'docker run -d -p 5000:5000 app:${env.BUILD_NUMBER}'
+                }
             }
         }
-        stage('Test') {
-            steps {
-                sh 'docker run --rm myapp python -m unittest discover'
-            }
+        
+        always {
+            cleanWs()
         }
-        stage('Deploy') {
-            steps {
-                sh 'docker run -d -p 8080:5000 --name myapp-container myapp'
-            }
-        }
+
+    // Enable GitHub webhook to trigger the pipeline on code changes
+    triggers {
+    githubPush()
+    }
+        
     }
 }
