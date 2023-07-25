@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    triggers {
+        githubPush()
+    }
     
     stages {
         stage('Clone Repository') {
@@ -32,9 +36,6 @@ pipeline {
         }
 
     // Enable GitHub webhook to trigger the pipeline on code changes
-    triggers {
-        githubPush()
-    }
-
+    
     }
 }
