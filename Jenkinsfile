@@ -1,9 +1,5 @@
 pipeline {
     agent any
-
-    triggers {
-        githubPush()
-    }
     
     stages {
         stage('Clone Repository') {
@@ -15,27 +11,30 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("app:${env.BUILD_NUMBER}", "-f Dockerfile .")
+                    def dockerImage = docker.build("my-flask-app:${env.BUILD_NUMBER}")
                     dockerImage.push()
                 }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run -d -p 8080:80 my-flask-app:${env.BUILD_NUMBER}'
             }
         }
     }
     
     post {
         success {
-            stage('Run Docker Container') {
-                steps {
-                    sh 'docker run -d -p 5000:5000 app:${env.BUILD_NUMBER}'
-                }
-            }
+            echo "Pipeline succeeded!"
+        }
+        
+        failure {
+            echo "Pipeline failed!"
         }
         
         always {
             cleanWs()
         }
-
-    // Enable GitHub webhook to trigger the pipeline on code changes
-    
     }
 }
