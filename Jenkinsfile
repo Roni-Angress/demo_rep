@@ -23,7 +23,14 @@ pipeline {
             steps {
                 script {
                     try {
-                        def dockerImage = docker.build(env.DOCKER_IMAGE)
+                        def dockerImage
+                        if (isUnix()) {
+                            dockerImage = docker.build(env.DOCKER_IMAGE)
+                        } else {
+                            dockerImage = docker.build(env.DOCKER_IMAGE).inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                                return docker.build(env.DOCKER_IMAGE)
+                            }
+                        }
                         dockerImage.push()
                     } catch (Exception e) {
                         // Handle any build failures or errors
@@ -38,7 +45,13 @@ pipeline {
         
         stage('Run Docker Container') {
             steps {
-                sh "docker run -p 5000:5000 ${env.DOCKER_IMAGE}"
+                script {
+                    if (isUnix()) {
+                        sh "docker run -p 5000:5000 ${env.DOCKER_IMAGE}"
+                    } else {
+                        bat "docker run -p 5000:5000 ${env.DOCKER_IMAGE}"
+                    }
+                }
             }
         }
     }
