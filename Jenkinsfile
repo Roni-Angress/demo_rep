@@ -13,11 +13,13 @@ pipeline {
         }
 
         
-        stage('Clone Repository') {
-            steps {
-                git clone 'https://github.com/Roni-Angress/demo_rep.git'
+    stage('Clone Repository') {
+        steps {
+            script {
+                git 'https://github.com/Roni-Angress/demo_rep.git'
             }
         }
+
         
         stage('Build Docker Image') {
             steps {
