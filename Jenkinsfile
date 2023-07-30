@@ -1,13 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            // Specify any other necessary agent configuration here
-        }
-    }
+    agent any
     
     environment {
-        DOCKER_IMAGE = "my-flask-app:${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "app:${env.BUILD_NUMBER}"
     }
     
     stages {
@@ -36,7 +31,7 @@ pipeline {
         
         stage('Run Docker Container') {
             steps {
-                sh "docker run -d -p 8080:80 ${env.DOCKER_IMAGE}"
+                sh "docker run -p 5000:5000 ${env.DOCKER_IMAGE}"
             }
         }
     }
