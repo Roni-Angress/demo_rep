@@ -1,9 +1,9 @@
 pipeline {
     agent any
     
-    environment {
-        DOCKER_IMAGE = "app:${env.BUILD_NUMBER}"
-    }
+    // environment {
+    //     DOCKER_IMAGE = "app:${env.BUILD_NUMBER}"
+    // }
     
     stages {
         stage('User') {
