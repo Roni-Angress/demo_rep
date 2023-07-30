@@ -1,5 +1,14 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3-alpine'
+            // Specify any other necessary agent configuration here
+        }
+    }
+    
+    environment {
+        DOCKER_IMAGE = "my-flask-app:${env.BUILD_NUMBER}"
+    }
     
     stages {
         stage('Clone Repository') {
@@ -11,15 +20,23 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("my-flask-app:${env.BUILD_NUMBER}")
-                    dockerImage.push()
+                    try {
+                        def dockerImage = docker.build(env.DOCKER_IMAGE)
+                        dockerImage.push()
+                    } catch (Exception e) {
+                        // Handle any build failures or errors
+                        // e.g., send a notification or perform a rollback
+                        throw e
+                    } finally {
+                        // Clean up any resources if needed
+                    }
                 }
             }
         }
         
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 8080:80 my-flask-app:${env.BUILD_NUMBER}'
+                sh "docker run -d -p 8080:80 ${env.DOCKER_IMAGE}"
             }
         }
     }
@@ -31,10 +48,6 @@ pipeline {
         
         failure {
             echo "Pipeline failed!"
-        }
-        
-        always {
-            cleanWs()
         }
     }
 }
