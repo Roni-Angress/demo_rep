@@ -6,10 +6,12 @@ pipeline {
     // }
     
     stages {
-        stage('User') {
+        stage('Build Docker image') {
             steps {
-                sh "cat /etc/passwd"
-                sh "print $$"
+                script {
+                    commit_id = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                }
+                sh "docker build -t app ."
             }
         }
 
