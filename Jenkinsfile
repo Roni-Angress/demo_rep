@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/Roni-Angress/demo_rep.git'
+                git clone 'https://github.com/Roni-Angress/demo_rep.git'
             }
         }
         
