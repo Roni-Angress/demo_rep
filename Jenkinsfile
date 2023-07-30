@@ -6,11 +6,18 @@ pipeline {
     }
     
     stages {
-        // stage('Clone Repository') {
-        //     steps {
-        //         git clone 'https://github.com/Roni-Angress/demo_rep.git'
-        //     }
-        // }
+        stage('User') {
+            steps {
+               sh "cat /etc/passwd"
+            }
+        }
+
+        
+        stage('Clone Repository') {
+            steps {
+                git clone 'https://github.com/Roni-Angress/demo_rep.git'
+            }
+        }
         
         stage('Build Docker Image') {
             steps {
