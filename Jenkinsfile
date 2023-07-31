@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("my-flask-app:${env.BUILD_NUMBER}")
+                    docker.build("app:${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -24,10 +24,6 @@ pipeline {
                     sh 'docker run -d -p 5000:5000 app:${env.BUILD_NUMBER}'
                 }
             }
-        }
-        
-        always {
-            cleanWs()
         }
     }
 }
