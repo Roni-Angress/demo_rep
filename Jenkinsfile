@@ -1,4 +1,3 @@
-// push v2
 pipeline {
     agent any
     
@@ -7,17 +6,24 @@ pipeline {
             steps {
                 git branch: 'main',
                 url: 'https://github.com/Roni-Angress/demo_rep.git'
-    }
-}
-
+            }
+        }
         
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("app:${env.BUILD_NUMBER}")
+                    def dockerImage = docker.build("app:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    def dockerContainer = dockerImage.run("-p 5000:5000 -d")
                 }
             }
         }
     }
-
+    
 }
