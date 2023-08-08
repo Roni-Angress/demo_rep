@@ -3,10 +3,7 @@ pipeline {
 
     environment {
         CONTAINER_NAME = "app-${BUILD_NUMBER}"
-        prev_build_number = BUILD_NUMBER - 1
-        PREVIOUS_CONTAINER_NAME = "app-${prev_build_number}"
-        echo ${CONTAINER_NAME}
-        echo ${PREVIOUS_CONTAINER_NAME}
+        PREVIOUS_CONTAINER_NAME = "app-${BUILD_NUMBER - 1}"
     }
 
     stages {
@@ -35,7 +32,7 @@ pipeline {
 
         stage('Run App Container') {
             steps {
-                // Stop and remove the existing container if it exists
+                // Stop and remove the container associated with the previous build
                 sh '''
                 docker stop ${PREVIOUS_CONTAINER_NAME} || true
                 docker rm ${PREVIOUS_CONTAINER_NAME} || true
