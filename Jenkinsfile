@@ -3,7 +3,10 @@ pipeline {
 
     environment {
         CONTAINER_NAME = "app-${BUILD_NUMBER}"
-        PREVIOUS_CONTAINER_NAME = "app-${BUILD_NUMBER - 1}"
+        prev_build_number = BUILD_NUMBER - 1
+        PREVIOUS_CONTAINER_NAME = "app-${prev_build_number}"
+        echo $CONTAINER_NAME
+        echo $PREVIOUS_CONTAINER_NAME
     }
 
     stages {
