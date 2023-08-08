@@ -4,8 +4,11 @@ FROM python:3.9-slim-buster
 # Install necessary packages
 RUN apt-get update && apt-get install -y git
 
-# Set the working directory
-WORKDIR /app
+# Use the '.' notation to set the working directory to the current folder
+WORKDIR .
+
+# Copy the application files into the container's working directory
+COPY app.py .
 
 # Clone the Git repository into the container
 
