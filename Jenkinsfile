@@ -1,13 +1,14 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Clone Repository') {
             steps {
-                // Clone the repository from GitHub
-                git clone 'https://github.com/Roni-Angress/demo_rep.git'
+                git branch: 'main',
+                url: 'https://github.com/Roni-Angress/demo_rep.git'
             }
         }
+        
         
         stage('Build Docker Image') {
             steps {
@@ -23,18 +24,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Run App Container') {
-            steps {
-                // Run the Docker container from the built image
-                script {
-                    def containerName = 'app-container'
-                    def imageName = 'app'
-                    
-                    docker.image(imageName).run('--name ' + containerName + ' -p 5000:5000 -d')
-                }
-            }
-        }
     }
     
+
 }
