@@ -23,25 +23,34 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                // Build Docker image from Dockerfile in the repository
-                sh '''
-                docker build -t ${CONTAINER_NAME} .
-                '''
+                script {
+                    // Set the CONTAINER_NAME variable for this stage
+                    withEnv(['CONTAINER_NAME=${CONTAINER_NAME}']) {
+                        // Build Docker image from Dockerfile in the repository
+                        sh '''
+                        docker build -t ${CONTAINER_NAME} .
+                        '''
+                    }
+                }
             }
         }
 
         stage('Run App Container') {
             steps {
-                // Stop and remove the container associated with the previous build
-                sh '''
-                docker stop ${PREVIOUS_CONTAINER_NAME} || true
-                docker rm ${PREVIOUS_CONTAINER_NAME} || true
-                '''
+                script {
+                    // Stop and remove the container associated with the previous build
+                    withEnv(['PREVIOUS_CONTAINER_NAME=${PREVIOUS_CONTAINER_NAME}']) {
+                        sh '''
+                        docker stop ${PREVIOUS_CONTAINER_NAME} || true
+                        docker rm ${PREVIOUS_CONTAINER_NAME} || true
+                        '''
+                    }
 
-                // Run the Docker container from the built image
-                sh '''
-                docker run -d --name ${CONTAINER_NAME} -p 5000:5000 app
-                '''
+                    // Run the Docker container from the built image
+                    sh '''
+                    docker run -d --name ${CONTAINER_NAME} -p 5000:5000 app
+                    '''
+                }
             }
         }
     }
