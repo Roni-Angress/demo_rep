@@ -24,7 +24,7 @@ pipeline {
             steps {
                 // Build Docker image from Dockerfile in the repository
                 sh '''
-                docker build -t app .
+                docker build -t ${CONTAINER_NAME} .
                 '''
             }
         }
