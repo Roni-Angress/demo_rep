@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         CONTAINER_NAME = "app-${BUILD_NUMBER}"
+        PREVIOUS_CONTAINER_NAME = "app-${BUILD_NUMBER - 1}"
     }
 
     stages {
@@ -33,8 +34,8 @@ pipeline {
             steps {
                 // Stop and remove the existing container if it exists
                 sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                docker stop ${PREVIOUS_CONTAINER_NAME} || true
+                docker rm ${PREVIOUS_CONTAINER_NAME} || true
                 '''
 
                 // Run the Docker container from the built image
