@@ -5,8 +5,8 @@ pipeline {
         CONTAINER_NAME = "app-${BUILD_NUMBER}"
         prev_build_number = BUILD_NUMBER - 1
         PREVIOUS_CONTAINER_NAME = "app-${prev_build_number}"
-        echo $CONTAINER_NAME
-        echo $PREVIOUS_CONTAINER_NAME
+        echo ${CONTAINER_NAME}
+        echo ${PREVIOUS_CONTAINER_NAME}
     }
 
     stages {
