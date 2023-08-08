@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
-                sh 'git clone https://github.com/your-username/your-repo.git'
+                sh 'git clone https://github.com/Roni-Angress/demo_rep.git'
             }
         }
 
