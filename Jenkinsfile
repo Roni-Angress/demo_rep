@@ -1,13 +1,14 @@
 pipeline {
     agent any
 
-    options {
-    // Clean the workspace before running the pipeline
-    cleanWs()
-    }
-
-
     stages {
+        stage('Clean Workspace') {
+            steps {
+                // Delete the existing directory (if it exists)
+                sh 'rm -rf demo_rep'
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
