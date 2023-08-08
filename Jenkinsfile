@@ -12,7 +12,7 @@ pipeline {
                 sh 'rm -rf demo_rep'
             }
         }
-        
+
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
@@ -42,16 +42,6 @@ pipeline {
                 docker run -d --name ${CONTAINER_NAME} -p 5000:5000 app
                 '''
             }
-        }
-    }
-    
-    post {
-        always {
-            // Clean up by stopping and removing the container
-            sh '''
-            docker stop ${CONTAINER_NAME}
-            docker rm ${CONTAINER_NAME}
-            '''
         }
     }
 }
