@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         CONTAINER_NAME = "app"
+        AWS_REGION = 'eu-central-1'
+        ECR_REPOSITORY_URI = '089454741934.dkr.ecr.eu-central-1.amazonaws.com/dynamic_website'
     }
 
     stages {
@@ -37,6 +39,24 @@ pipeline {
                 // Build Docker image from Dockerfile in the repository
                 sh '''
                 docker build -t ${CONTAINER_NAME} .
+                '''
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                sh '''
+                aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URI}
+ 
+                '''
+            }
+        }
+
+        stage('Tag and Push to ECR') {
+            steps {
+                sh '''
+                docker tag app:latest ${ECR_REPOSITORY_URI}:latest
+                docker push ${ECR_REPOSITORY_URI}:latest
                 '''
             }
         }
