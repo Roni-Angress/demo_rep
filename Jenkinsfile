@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CONTAINER_NAME = "app-${BUILD_NUMBER}"
+        CONTAINER_NAME = "app"
     }
 
     stages {
@@ -12,6 +12,18 @@ pipeline {
                 sh 'rm -rf demo_rep'
             }
         }
+
+        stage('Stop and Remove Old Container') {
+            steps {
+                // Stop and remove the existing container if it exists
+                sh '''
+                docker stop ${CONTAINER_NAME} || true
+                docker rm ${CONTAINER_NAME} || true
+                '''
+            }
+        }        
+
+        
 
         stage('Clone Repository') {
             steps {
