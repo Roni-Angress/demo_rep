@@ -45,12 +45,25 @@ pipeline {
 
         stage('Login to ECR') {
             steps {
-                sh '''
-                aws ecr get-login-password --region eu-central-1 --profile jenkins | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
-                '''
-              //aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
+                script {
+                    withCredentials([
+                        string(credentialsId: 'AKIARJU7LBGXETWMQCAY', variable: '9+w1nbYwcA44Ap5rS4fUq/XVI6/IbJee6GVupWo/')
+                    ]) {
+                        def awsLoginCmd = "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com"
+                       //sh "echo \${AWS_CREDS} | ${awsLoginCmd}"
+                    }
+                }
             }
         }
+
+        // stage('Login to ECR') {
+        //     steps {
+        //         sh '''
+        //         aws ecr get-login-password --region eu-central-1 --profile jenkins | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
+        //         '''
+        //       //aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
+        //     }
+        // }
 
         stage('Tag and Push to ECR') {
             steps {
