@@ -47,14 +47,18 @@ pipeline {
             steps {
                 script {
                     withCredentials([
-                        string(credentialsId: 'AKIARJU7LBGXETWMQCAY', variable: '9+w1nbYwcA44Ap5rS4fUq/XVI6/IbJee6GVupWo/')
+                        awsAccessKey(credentialsId: 'aws_user', variable: 'AWS_ACCESS_KEY'),
+                        awsSecretKey(credentialsId: 'aws_user', variable: 'AWS_SECRET_KEY')
                     ]) {
-                        def awsLoginCmd = "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com"
-                       //sh "echo \${AWS_CREDS} | ${awsLoginCmd}"
+                        sh '''
+                        # Use the AWS credentials to log in to ECR
+                        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
+                        '''
                     }
                 }
             }
         }
+
 
         // stage('Login to ECR') {
         //     steps {
