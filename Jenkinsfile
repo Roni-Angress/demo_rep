@@ -46,7 +46,7 @@ pipeline {
         stage('Login to ECR') {
             steps {
                 sh '''
-                sudo aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
+                aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
                 '''
               //aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
             }
@@ -55,8 +55,8 @@ pipeline {
         stage('Tag and Push to ECR') {
             steps {
                 sh '''
-                sudo docker tag app:latest ${ECR_REPOSITORY_URI}:latest
-                sudo docker push ${ECR_REPOSITORY_URI}:latest
+                docker tag app:latest ${ECR_REPOSITORY_URI}:latest
+                docker push ${ECR_REPOSITORY_URI}:latest
                 '''
             }
         }
