@@ -25,8 +25,6 @@ pipeline {
             }
         }        
 
-        
-
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
@@ -50,8 +48,8 @@ pipeline {
                         awsAccessKey(credentialsId: 'aws_user', variable: 'AWS_ACCESS_KEY'),
                         awsSecretKey(credentialsId: 'aws_user', variable: 'AWS_SECRET_KEY')
                     ]) {
+                        // Use the AWS credentials to log in to ECR
                         sh '''
-                        # Use the AWS credentials to log in to ECR
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 089454741934.dkr.ecr.eu-central-1.amazonaws.com
                         '''
                     }
