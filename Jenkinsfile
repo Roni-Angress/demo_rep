@@ -44,9 +44,9 @@ pipeline {
         stage('Login to ECR') {
             steps {
                 script {
-                    //withCredentials([
-                    //  awsAccessKey(credentialsId: 'aws_user', variable: 'AWS_ACCESS_KEY'),
-                    //    awsSecretKey(credentialsId: 'aws_user', variable: 'AWS_SECRET_KEY')
+                    withCredentials([
+                        awsAccessKey(credentialsId: 'aws_user', variable: 'AWS_ACCESS_KEY'),
+                        awsSecretKey(credentialsId: 'aws_user', variable: 'AWS_SECRET_KEY')
                     ]) {
                         // Use the AWS credentials to log in to ECR
                         sh '''
