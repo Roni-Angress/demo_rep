@@ -59,19 +59,19 @@ pipeline {
             }
         }
 
-        stage('Run App Container') {
-            steps {
-                // Stop and remove the existing container if it exists
-                sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-                '''
+        // stage('Run App Container') {
+        //     steps {
+        //         // Stop and remove the existing container if it exists
+        //         sh '''
+        //         docker stop ${CONTAINER_NAME} || true
+        //         docker rm ${CONTAINER_NAME} || true
+        //         '''
 
-                // Run the Docker container from the built image
-                sh '''
-                docker run -d --name ${CONTAINER_NAME} -p 5000:5000 app
-                '''
-            }
-        }
+        //         // Run the Docker container from the built image
+        //         sh '''
+        //         docker run -d --name ${CONTAINER_NAME} -p 5000:5000 app
+        //         '''
+        //     }
+        // }
     }
 }
