@@ -5,6 +5,7 @@ pipeline {
         CONTAINER_NAME = "app"
         AWS_REGION = 'eu-central-1'
         ECR_REPOSITORY_URI = '089454741934.dkr.ecr.eu-central-1.amazonaws.com/dynamic_website'
+        version = "${env.BUILD_ID}"
     }
 
     stages {
@@ -53,8 +54,8 @@ pipeline {
         stage('Tag and Push to ECR') {
             steps {
                 sh '''
-                docker tag app:latest ${ECR_REPOSITORY_URI}:latest
-                docker push ${ECR_REPOSITORY_URI}:latest
+                docker tag app:latest ${ECR_REPOSITORY_URI}:${version}
+                docker push ${ECR_REPOSITORY_URI}:${version}
                 '''
             }
         }
